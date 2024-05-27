@@ -36,13 +36,44 @@
             text-align: center;
         }
         .button {
-            top: calc(50vh + 10vw / 2.32 + 10px);
+            top: calc(50vh + 10vw / 2.32 + 25px);
             /* top: 100px; */
             position: fixed;
         }
+        #controlButton {
+            position: fixed;
+            left: calc(42%);
+            transform: translateX(-50%);
+        }
+        #resetButton {
+            position: fixed;
+            right: calc(42%);
+            transform: translateX(50%);
+        }
         .button button {
+            padding-left: 10px;
+            padding-right: 10px;
+            padding-top: 1px;
+            padding-bottom: 4px;
             font-family: MintTriangles, Torus;
             font-size: 2vw;
+            border-radius: 15px;
+            border: 4px solid; /* Solid black border */
+        }
+        .button button.green {
+            background-color: rgb(0, 51, 0);
+            border-color: rgb(10, 150, 0);
+            color: rgb(10, 150, 0);
+        }
+        .button button.red {
+            background-color: rgb(51, 0, 0);
+            border-color: rgb(185, 0, 0);
+            color: rgb(185, 0, 0);
+        }
+        .button button.gray {
+            background-color: rgb(38, 38, 38);
+            border-color: rgb(124, 124, 124);
+            color: rgb(124, 124, 124);
         }
     </style>
 </head>
@@ -52,8 +83,8 @@
         <span id="time">​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​</span></p>
     </div>
     <div class="button">
-        <button id="controlButton">Start  Timer</button>
-        <button id="resetButton">Reset  Timer</button>
+        <button id="controlButton" class="green">Start  Timer</button>
+        <button id="resetButton" class="gray">Reset  Timer</button>
     </div>
 
     <script>
@@ -105,19 +136,30 @@
                 updateTimer();
                 document.getElementById('controlButton').textContent = "Stop  Timer";
                 timerRunning = true;
+                const buttonReset = document.getElementById('resetButton');
+                buttonReset.classList.replace('gray', 'red')
+                const buttonControl = document.getElementById('controlButton');
+                buttonControl.classList.replace('green', 'red')
             } else {
                 clearInterval(timerInterval);
                 document.getElementById('controlButton').textContent = "Resume  Timer";
                 timerRunning = false;
+                const buttonControl = document.getElementById('controlButton');
+                buttonControl.classList.replace('green', 'red')
             }
         }
 
         // Function to reset the timer
         function resetTimer() {
             clearInterval(timerInterval);
+            timerRunning = false
+            const buttonReset = document.getElementById('resetButton');
+            const buttonControl = document.getElementById('controlButton');
             document.getElementById('controlButton').textContent = "Start  Timer";
             var timeElement = document.getElementById('time');
             timeElement.innerHTML = '​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​';
+            buttonReset.classList.replace('red', 'gray')
+            buttonControl.classList.replace('red', 'green')
             elapsedMilliseconds = 0;
             elapsedSeconds = 0;
             elapsedMinutes = 0;
@@ -132,6 +174,8 @@
                 clearInterval(timerInterval);
                 document.getElementById('controlButton').textContent = "Resume  Timer";
                 timerRunning = false;
+                const buttonControl = document.getElementById('controlButton');
+                buttonControl.classList.replace('red', 'green')
             }
         });
 
