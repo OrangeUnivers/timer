@@ -1,0 +1,142 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <style>
+        @font-face {
+            font-family: MintTriangles;
+            src: url(MintTriangles.otf);
+        }
+        @font-face {
+            font-family: Torus;
+            src: url(Torus.otf);
+        }
+        body {
+            overflow: hidden;
+            background-color: rgb(17, 17, 17);
+            background-repeat: repeat;
+            display: flex;
+            justify-content: center; /* Center horizontally */
+            align-items: center; /* Center vertically */
+            height: 100vh; /* Set the height to full viewport height */
+        }
+        p {
+            font-family: MintTriangles, Torus;
+            font-size: 10vw;
+            position: relative;
+            color: rgb(183, 183, 183);
+            text-align: center;
+        }
+        .underlay {
+            position: absolute;
+            color: rgb(42, 42, 42);
+            z-index: -1;
+            text-align: center;
+        }
+        .button {
+            top: calc(50vh + 10vw / 2.32 + 10px);
+            /* top: 100px; */
+            position: fixed;
+        }
+        .button button {
+            font-family: MintTriangles, Torus;
+            font-size: 2vw;
+        }
+    </style>
+</head>
+<body>
+    <div>
+        <p class="container"><span class="underlay">**<span style="opacity: 0;">:</span>**<span style="opacity: 0;">:</span>**<span style="opacity: 0;">:</span>**</span>
+        <span id="time">​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​</span></p>
+    </div>
+    <div class="button">
+        <button id="controlButton">Start  Timer</button>
+        <button id="resetButton">Reset  Timer</button>
+    </div>
+
+    <script>
+        var timerInterval;
+        var timerRunning = false;
+        var elapsedMilliseconds = 0;
+        var elapsedSeconds = 0;
+        var elapsedMinutes = 0;
+        var elapsedHours = 0;
+
+        function updateTimer() {
+            var timeElement = document.getElementById('time');
+            var milliseconds = elapsedMilliseconds;
+            var seconds = elapsedSeconds;
+            var minutes = elapsedMinutes;
+            var hours = elapsedHours;
+
+            timerInterval = setInterval(function() {
+                milliseconds += 10;
+                if (milliseconds >= 1000) {
+                    milliseconds = 0;
+                    seconds++;
+                    if (seconds >= 60) {
+                        seconds = 0;
+                        minutes++;
+                        if (minutes >= 60) {
+                            minutes = 0;
+                            hours++;
+                        }
+                    }
+                }
+
+                var formattedMilliseconds = milliseconds.toString().padStart(3, '0').slice(0, 2); // Ensure two digits
+                var formattedSeconds = seconds == 0 ? "​ ​ " : (seconds < 10 ? '​ ' + seconds : seconds);
+                var formattedMinutes = minutes == 0 ? "​ ​ " : (minutes < 10 ? '​ ' + minutes : minutes);
+                var formattedHours = hours == 0 ? "​ ​ " : (hours < 10 ? '​ ' + hours : hours);
+
+                timeElement.innerHTML = formattedHours + '<span style="color: rgb(0, 204, 102)">:</span>' + formattedMinutes + '<span style="color: rgb(0, 204, 102)">:</span>' + formattedSeconds + '<span style="color: rgb(0, 204, 102)">:</span>' + formattedMilliseconds;
+
+                elapsedMilliseconds = milliseconds;
+                elapsedSeconds = seconds;
+                elapsedMinutes = minutes;
+                elapsedHours = hours;
+            }, 10); // Milliseconds incremented every 100ms
+        }
+
+        function startTimer() {
+            if (!timerRunning) {
+                updateTimer();
+                document.getElementById('controlButton').textContent = "Stop  Timer";
+                timerRunning = true;
+            } else {
+                clearInterval(timerInterval);
+                document.getElementById('controlButton').textContent = "Resume  Timer";
+                timerRunning = false;
+            }
+        }
+
+        // Function to reset the timer
+        function resetTimer() {
+            clearInterval(timerInterval);
+            document.getElementById('controlButton').textContent = "Start  Timer";
+            var timeElement = document.getElementById('time');
+            timeElement.innerHTML = '​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​<span style="color: rgb(0, 204, 102)">:</span>​ ​ ​';
+            elapsedMilliseconds = 0;
+            elapsedSeconds = 0;
+            elapsedMinutes = 0;
+            elapsedHours = 0;
+        }
+
+        // Start or resume the timer when the button is clicked
+        document.getElementById('controlButton').addEventListener('click', function() {
+            if (!timerRunning || document.getElementById('controlButton').textContent === "Resume  Timer") {
+                startTimer();
+            } else {
+                clearInterval(timerInterval);
+                document.getElementById('controlButton').textContent = "Resume  Timer";
+                timerRunning = false;
+            }
+        });
+
+        // Reset the timer when the reset button is clicked
+        document.getElementById('resetButton').addEventListener('click', resetTimer);
+    </script>
+</body>
+</html>
