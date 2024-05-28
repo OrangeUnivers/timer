@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Timer</title>
     <style>
         @font-face {
             font-family: MintTriangles;
@@ -118,8 +118,19 @@
                 }
 
                 var formattedMilliseconds = milliseconds.toString().padStart(3, '0').slice(0, 2); // Ensure two digits
-                var formattedSeconds = seconds == 0 ? "​ ​ " : (seconds < 10 ? '​ ' + seconds : seconds);
-                var formattedMinutes = minutes == 0 ? "​ ​ " : (minutes < 10 ? '​ ' + minutes : minutes);
+                // var formattedSeconds = seconds == 0 ? "​ ​ " : (seconds < 10 ? '​ ' + seconds : seconds);
+                // var formattedMinutes = minutes == 0 ? "​ ​ " : (minutes < 10 ? '​ ' + minutes : minutes);
+                // var formattedHours = hours == 0 ? "​ ​ " : (hours < 10 ? '​ ' + hours : hours);
+                if (minutes > 0) {
+                    var formattedSeconds = seconds == 0 ? "00" : (seconds < 10 ? '0' + seconds : seconds);
+                } else {
+                    var formattedSeconds = seconds == 0 ? "​ ​ " : (seconds < 10 ? '​ ' + seconds : seconds);
+                }
+                if (hours > 0) {
+                    var formattedMinutes = minutes == 0 ? "00" : (minutes < 10 ? '0' + minutes : minutes);
+                } else {
+                    var formattedMinutes = minutes == 0 ? "​ ​ " : (minutes < 10 ? '​ ' + minutes : minutes);
+                }
                 var formattedHours = hours == 0 ? "​ ​ " : (hours < 10 ? '​ ' + hours : hours);
 
                 timeElement.innerHTML = formattedHours + '<span style="color: rgb(0, 204, 102)">:</span>' + formattedMinutes + '<span style="color: rgb(0, 204, 102)">:</span>' + formattedSeconds + '<span style="color: rgb(0, 204, 102)">:</span>' + formattedMilliseconds;
